@@ -8,7 +8,7 @@ import (
 	"golang.org/x/net/html"
 )
 
-func GetUrlFromHtml(htmlBody, rawBaseUrl string) ([]string, error) {
+func GetUrlsFromHtml(htmlBody, rawBaseUrl string) ([]string, error) {
 	doc, err := html.Parse(strings.NewReader(htmlBody))
 	if err != nil {
 		return nil, fmt.Errorf("Error parsing html: %w", err)
