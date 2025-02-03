@@ -20,10 +20,18 @@ func main() {
 	baseUrl := argsWithoutProgramName[0]
 	fmt.Println("starting crawl of ", baseUrl)
 
-	pages := make(map[string]int)
+	const maxConcurrency = 10
+	cfg, err := configure(baseUrl, maxConcurrency)
+	if err != nil {
+		fmt.Println("error configuring: ", err)
+		os.Exit(1)
+	}
 
-	pages = crawlPage(baseUrl, baseUrl, pages)
-	for url, count := range pages {
+	cfg.wg.Add(1)
+	go cfg.crawlPage(baseUrl)
+	cfg.wg.Wait()
+
+	for url, count := range cfg.pages {
 		fmt.Printf("URL: %s, Count: %d\n", url, count)
 	}
 
