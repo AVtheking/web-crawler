@@ -13,6 +13,15 @@ func (cfg *config) crawlPage(rawCurrentURL string) {
 		<-cfg.concurrencyControl
 		cfg.wg.Done()
 	}()
+
+	//check if the max pages is reached
+	cfg.mu.Lock()
+	if len(cfg.pages) >= cfg.maxPages {
+		cfg.mu.Unlock()
+		return
+	}
+	cfg.mu.Unlock()
+
 	// if current url is on different domain then return pages
 	currentURL, err := url.Parse(rawCurrentURL)
 	if err != nil {
