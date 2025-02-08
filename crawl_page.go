@@ -15,12 +15,9 @@ func (cfg *config) crawlPage(rawCurrentURL string) {
 	}()
 
 	//check if the max pages is reached
-	cfg.mu.Lock()
-	if len(cfg.pages) >= cfg.maxPages {
-		cfg.mu.Unlock()
+	if cfg.pagesLength() >= cfg.maxPages {
 		return
 	}
-	cfg.mu.Unlock()
 
 	// if current url is on different domain then return pages
 	currentURL, err := url.Parse(rawCurrentURL)

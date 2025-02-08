@@ -27,6 +27,12 @@ func (cfg *config) addPageVisit(url string) (isFirst bool) {
 	return true
 }
 
+func (cfg *config) pagesLength() int {
+	cfg.mu.Lock()
+	defer cfg.mu.Unlock()
+	return len(cfg.pages)
+}
+
 func configure(rawBaseURL string, maxConcurrency int, maxPages int) (*config, error) {
 	baseURL, err := url.Parse(rawBaseURL)
 	if err != nil {
